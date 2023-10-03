@@ -1,8 +1,11 @@
 package org.example
 
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.{SparkSession, DataFrame}
+import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.functions.expr
+import org.apache.spark.sql.functions.concat
 
 object ejemplo2 {
   def main(args: Array[String]): Unit = {
@@ -42,6 +45,31 @@ object ejemplo2 {
     // Print the schema used by Spark to process the DataFrame
     println(blogsDF.printSchema) //schema tomado por Spark
     println(blogsDF.schema) //schema que hemos creado
+
+
+    // Get the column names as an array of strings
+    val columnNames: Array[String] = blogsDF.columns
+
+    // Print the column names
+    columnNames.foreach(println)
+
+    // Use col to compute value
+    blogsDF.select(col("Hits") * 2).show(2)
+
+    // Calcular la columna "Big Hitters" (mayores de 10000 Hits)
+    val resultDF = blogsDF.withColumn("Big Hitters", expr("Hits > 10000"))
+
+    // Mostrar el resultado
+    resultDF.show()
+
+    // Concatenate three columns, create a new column, and show only the newly created concatenated column
+    val result1DF = blogsDF.withColumn("AuthorsId", (concat(expr("First"), expr("Last"), expr("Id"))))
+      .select(col("AuthorsId"))
+      .show(4)
+
+    // Sort by column "Id" in descending order
+    blogsDF.sort(col("Id").desc).show()
+
 
 
   }
