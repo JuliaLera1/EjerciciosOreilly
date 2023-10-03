@@ -1,11 +1,9 @@
-package org.example
-
 import org.apache.spark.sql.functions.avg
 import org.apache.spark.sql.SparkSession
 
 
 object ejemplo {
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
   //create a DataFrame using SparkSession
 val spark = SparkSession
   .builder
