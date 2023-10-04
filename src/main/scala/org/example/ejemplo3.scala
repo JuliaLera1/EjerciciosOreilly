@@ -41,6 +41,9 @@ object ejemplo3 {
     // Si en vez de array ponemos List, sí implementa directamente a string, no tenmos que hacer nada más que print
 
 
+    val rows = Seq(("Matei Zaharia", "CA"), ("Reynold Xin", "CA"))
+    val authorsDF = spark.createDataFrame(rows).toDF("Author", "State")
+    authorsDF.show()
 
 
   }
