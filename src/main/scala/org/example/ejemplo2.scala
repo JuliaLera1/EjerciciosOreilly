@@ -63,7 +63,7 @@ object ejemplo2 {
     resultDF.show()
 
     // Concatenate three columns, create a new column, and show only the newly created concatenated column
-    val result1DF = blogsDF.withColumn("AuthorsId", (concat(expr("First"), expr("Last"), expr("Id"))))
+    val result1DF = blogsDF.withColumn("AuthorsId", concat(expr("First"), expr("Last"), expr("Id")))
       .select(col("AuthorsId"))
       .show(4)
 
