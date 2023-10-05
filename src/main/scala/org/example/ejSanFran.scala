@@ -22,28 +22,37 @@ object ejSanFran {
 //    val fire= spark.sql("SELECT CallNumber, UnitID, IncidentNumber, CallType, CallDate, WatchDate, CallFinalDisposition, AvailableDtTm, Address, City, Zipcode, Battalion," +
 //      "StationArea, Box, OriginalPriority, Priority, FinalPriority, ALSUnit, CallTypeGroup, NumAlarms, UnitType, UnitSequenceInCallDispatch, FirePreventionDistrict, SupervisorDistrict" +
 //      "Neighborhood, Location, RowID, Delay FROM sampleDF")
-    // ahora
-//    val fireSchema = StructType(Array(StructField("CallNumber", IntegerType, true), StructField("UnitID", StringType, true), StructField("IncidentNumber", IntegerType, true),
-//    StructField("CallType", StringType, true), StructField("CallDate", StringType, true), StructField("WatchDate", StringType, true),
-//    StructField("CallFinalDisposition", StringType, true), StructField("AvailableDtTm", StringType, true), StructField("Address", StringType, true),
-//    StructField("City", StringType, true), StructField("Zipcode", IntegerType, true), StructField("Battalion", StringType, true),
-//    StructField("StationArea", StringType, true), StructField("Box", StringType, true), StructField("OriginalPriority", StringType, true),
-//    StructField("Priority", StringType, true), StructField("FinalPriority", IntegerType, true), StructField("ALSUnit", BooleanType, true), StructField("CallTypeGroup", StringType, true),
-//    StructField("Number of Alarms", IntegerType, true), StructField("UnitType", StringType, true), StructField("UnitSequenceInCallDispatch", IntegerType, true),
-//    StructField("FirePreventionDistrict", StringType, true), StructField("SupervisorDistrict", StringType, true), StructField("Neighborhood", StringType, true),
-//    StructField("Location", StringType, true), StructField("RowID", StringType, true), StructField("Delay", FloatType, true)) )
+
+
+    val fireSchema = StructType(Array(StructField("Call Number", IntegerType, true), StructField("ID", StringType, true), StructField("Incident Number", IntegerType, true),
+    StructField("Incident Date", StringType, true), StructField("Alarm DtTm", StringType, true),
+    StructField("Arrival DtTm", StringType, true), StructField("Close DtTm", StringType, true), StructField("Address", StringType, true),
+    StructField("City", StringType, true), StructField("zipcode", IntegerType, true), StructField("Battalion", StringType, true),
+    StructField("Station Area", StringType, true), StructField("Box", StringType, true), StructField("Primary Situation", StringType, true),
+    StructField("Number of Alarms", IntegerType, true), StructField("First Unit On Scene", StringType, true),
+    StructField("Action Taken Primary", StringType, true), StructField("Supervisor District", StringType, true), StructField("neighborhood_district", StringType, true),
+    StructField("Point", StringType, true)) )
 
     val sfFireFile= "C:/users/julia.lera/downloads/Fire_incidents.csv"
-    val col = Seq("Call Number","ID","Incident Number", "Incident Date", "Alarm DtTm", "Arrival DtTm", "Close DtTm", "Address", "City", "zipcode", "Battalion",
+    val columnas = Seq("Call Number","ID","Incident Number","Incident Date", "Alarm DtTm", "Arrival DtTm", "Close DtTm", "Address", "City", "zipcode", "Battalion",
     "Station Area", "Box", "Primary Situation", "Number of Alarms", "First Unit On Scene", "Action Taken Primary",
       "Supervisor District", "neighborhood_district", "Point")
-    val FireDF = spark.read
+    //no puedes darle el nombre col porque col es una función propia de Spark
+    val FireDF = spark.read.schema(fireSchema)
       .option("header", "true")
-      .csv(sfFireFile).select(col.head, col.tail: _*)
+      .csv(sfFireFile).select(columnas.head, columnas.tail: _*)
 
-    FireDF.show()
+    //FireDF.show()
 
     //val fireDF = spark.read.schema(fireSchema).option("header", "true").csv(sfFireFile)
+
+    //FireDF.printSchema() //no es el schema que queríamos
+
+    val fewFireDF = FireDF
+      .select("Incident Number", "Arrival DtTm", "Primary Situation")
+      .where(col("Primary Situation").isNotNull)
+
+    fewFireDF.show()
 
 
 
