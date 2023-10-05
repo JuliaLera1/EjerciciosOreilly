@@ -38,9 +38,11 @@ object ejSanFran {
     "Station Area", "Box", "Primary Situation", "Number of Alarms", "First Unit On Scene", "Action Taken Primary",
       "Supervisor District", "neighborhood_district", "Point")
     //no puedes darle el nombre col porque col es una función propia de Spark
-    val FireDF = spark.read.schema(fireSchema)
+    val FireDF = spark.read
+      //.schema(fireSchema) //por alguna razón si pongo así me desorena las columnas
       .option("header", "true")
       .csv(sfFireFile).select(columnas.head, columnas.tail: _*)
+
 
     //FireDF.show()
 
@@ -50,9 +52,14 @@ object ejSanFran {
 
     val fewFireDF = FireDF
       .select("Incident Number", "Arrival DtTm", "Primary Situation")
-      .where(col("Primary Situation").isNotNull)
+      .where(col("Primary Situation").startsWith("7"))
 
-    fewFireDF.show()
+    //fewFireDF.show()
+
+    val dFire = FireDF.groupBy("Call Number", "Incident Date").agg(countDistinct("Incident Number") as("NumIncidentsPerson")).orderBy(col("NumIncidentsPerson").desc)
+     dFire.show()
+
+
 
 
 
