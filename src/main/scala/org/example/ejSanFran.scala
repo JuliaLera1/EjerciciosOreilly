@@ -56,7 +56,7 @@ object ejSanFran {
 
     //fewFireDF.show()
 
-    val dFire = FireDF.groupBy("Call Number", "Incident Date").agg(countDistinct("Incident Number") as("NumIncidentsPerson")).orderBy(col("NumIncidentsPerson").desc)
+    val dFire = FireDF.select("Primary Situation").distinct().orderBy(col("Primary Situation"))
      dFire.show()
 
 
