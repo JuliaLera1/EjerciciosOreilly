@@ -67,9 +67,16 @@ object ejSanFran {
       .withColumn("CloseTS", to_timestamp(col("Close DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Close DtTm")
       .withColumn("AlarmTS", to_timestamp(col("Alarm DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Alarm DtTm")
 //importante poner en la segunda parte de to_timestamp en qué formato está nuestra fecha, MM es mes, mm es minuto
-    fireTsDF.select("IncidentDate", "ArrivalTS", "CloseTS", "AlarmTS").show(5,false)
+    //fireTsDF.select("IncidentDate", "ArrivalTS", "CloseTS", "AlarmTS").show(5,false)
 
-    fireTsDF.printSchema()
+    //val resultado = fireTsDF.withColumn("Delay", col("ArrivalTS") - col("IncidentDate"))
+    //val resultado = fireTsDF.withColumn("Delay", datediff(col("ArrivalTS"), col("IncidentDate"))) //esto me da 0 siempre, no cuenta las horas creo
+    val resultado = fireTsDF.withColumn(
+      "Delay",
+      (unix_timestamp(col("ArrivalTS")) - unix_timestamp(col("IncidentDate"))) / 3600)
+    //esta forma me da las horas
+    //resultado.show()
+
 
   }
 
