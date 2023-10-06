@@ -39,28 +39,28 @@ object ejSanFran {
       "Supervisor District", "neighborhood_district", "Point")
     //no puedes darle el nombre col porque col es una función propia de Spark
     val FireDF = spark.read
-      //.schema(fireSchema) //por alguna razón si pongo así me desorena las columnas
       .option("header", "true")
       .csv(sfFireFile).select(columnas.head, columnas.tail: _*)
 
-
     //FireDF.show()
+    //FireDF.printSchema() //no es el schema que queríamos, pero si le aplico el schema no funciona
+
 
     //val fireDF = spark.read.schema(fireSchema).option("header", "true").csv(sfFireFile)
 
-    //FireDF.printSchema() //no es el schema que queríamos
 
     val fewFireDF = FireDF
       .select("Incident Number", "Arrival DtTm", "Primary Situation")
-      .where(col("Primary Situation").startsWith("7"))
+    .where(col("Primary Situation").startsWith("7"))
 
     //fewFireDF.show()
 
     val dFire = FireDF.select("Primary Situation").distinct().orderBy(col("Primary Situation"))
      dFire.show()
 
-
-
+    val newFireDF= FireDF.withColumnRenamed("Action Taken Primary", "PrimaryAction")
+    newFireDF.select("PrimaryAction").where(col("PrimaryAction").equalTo("86 - Investigate")).show
+    
 
 
   }
