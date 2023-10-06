@@ -75,8 +75,16 @@ object ejSanFran {
       "Delay",
       (unix_timestamp(col("ArrivalTS")) - unix_timestamp(col("IncidentDate"))) / 3600)
     //esta forma me da las horas
-    resultado.select("neighborhood_district", "Delay").groupBy("neighborhood_district").agg(avg("Delay").as("AvgDelay")).orderBy(col("AvgDelay").desc).show()
+    //resultado.select("neighborhood_district", "Delay").groupBy("neighborhood_district").agg(avg("Delay").as("AvgDelay")).orderBy(col("AvgDelay").desc).show()
 
+//    fireTsDF
+//      .select("PrimaryAction")
+//      .where(col("PrimaryAction").isNotNull)
+//      .groupBy("PrimaryAction")
+//      .count()
+//      .orderBy(desc("count"))
+//      .show(10, false)
+    
 
   }
 
