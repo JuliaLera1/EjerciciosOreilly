@@ -56,12 +56,19 @@ object ejSanFran {
     //fewFireDF.show()
 
     val dFire = FireDF.select("Primary Situation").distinct().orderBy(col("Primary Situation"))
-     dFire.show()
+     //dFire.show()
 
     val newFireDF= FireDF.withColumnRenamed("Action Taken Primary", "PrimaryAction")
-    newFireDF.select("PrimaryAction").where(col("PrimaryAction").equalTo("86 - Investigate")).show
-    
+    //newFireDF.show()
 
+    val fireTsDF = newFireDF.withColumn("IncidentDate", to_timestamp(col("Incident Date"), "yyyy-MM-dd'T'HH:mm:ss"))
+      .drop("Incident Date")
+      .withColumn("ArrivalTS", to_timestamp(col("Arrival DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Arrival DtTm")
+      .withColumn("CloseTS", to_timestamp(col("Close DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Close DtTm")
+//importante poner en la segunda parte de to_timestamp en qué formato está nuestra fecha, MM es mes, mm es minuto
+    fireTsDF.select("IncidentDate", "ArrivalTS", "CloseTS").show(5,false)
+
+    fireTsDF.printSchema()
 
   }
 
