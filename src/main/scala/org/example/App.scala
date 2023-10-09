@@ -30,6 +30,9 @@ object App {
     val df3 = spark.read.text("src/main/resources/el_quijote.txt")
     df3.show()
 
+    ejemplo.ejecutable(spark)
+
+
   }
 
 }

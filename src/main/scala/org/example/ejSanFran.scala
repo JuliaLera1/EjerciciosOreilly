@@ -99,14 +99,18 @@ object ejSanFran {
 
     //fireTsDF.groupBy(month(col("Incidentdate"))).agg(countDistinct(col("IncidentDate"))).show()
 
-    resultado
-      .select(F.sum("Number of Alarms"), F.avg("Delay"),
-        F.min(col("Delay")), F.max("Delay"))
-      .show()
+//    resultado
+//      .select(F.sum("Number of Alarms"), F.avg("Delay"),
+//        F.min(col("Delay")), F.max("Delay"))
+//      .show()
     //Delay.min sale negativo porque hay un fallo en los datos
 
+    //EJERCICIOS EXTRA
+    //resultado.select("Primary Situation").where(year(col("IncidentDate"))===2018).groupBy("Primary Situation").count().show()
 
+    val res2 = resultado.where(year(col("IncidentDate"))===2018).groupBy(month(col("IncidentDate")))//.count().as("ct")
 
+    res2.count().orderBy(desc("count")).show()
 
   }
 
