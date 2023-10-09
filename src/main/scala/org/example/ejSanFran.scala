@@ -79,12 +79,23 @@ object ejSanFran {
 
 //    fireTsDF
 //      .select("PrimaryAction")
-//      .where(col("PrimaryAction").isNotNull)
+//     .where(col("PrimaryAction").isNotNull)
 //      .groupBy("PrimaryAction")
 //      .count()
 //      .orderBy(desc("count"))
 //      .show(10, false)
-    
+
+//    fireTsDF
+//      .select("PrimaryAction")
+//      .where(col("PrimaryAction").isNotNull)
+//      .distinct()
+//      .show(10, false)
+
+    //fireTsDF.select(year(col("IncidentDate"))).distinct().orderBy(year(col("IncidentDate"))).show()
+
+    //fireTsDF.where(month(col("Incidentdate"))===7).agg(count(col("Incident Number"))).show() //si queremos comparar, no vale poner solo un =
+
+    fireTsDF.groupBy(month(col("Incidentdate"))).agg(countDistinct(col("IncidentDate"))).show()
 
   }
 
