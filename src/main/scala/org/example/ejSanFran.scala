@@ -3,6 +3,8 @@ package org.example
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{functions => F}
+
 
 object ejSanFran {
   def main(args: Array[String]): Unit = {
@@ -67,7 +69,7 @@ object ejSanFran {
       .withColumn("CloseTS", to_timestamp(col("Close DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Close DtTm")
       .withColumn("AlarmTS", to_timestamp(col("Alarm DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Alarm DtTm")
 //importante poner en la segunda parte de to_timestamp en qué formato está nuestra fecha, MM es mes, mm es minuto
-    //fireTsDF.select("IncidentDate", "ArrivalTS", "CloseTS", "AlarmTS").show(5,false)
+
 
 //    val resultado = fireTsDF.withColumn("Delay", col("ArrivalTS") - col("IncidentDate"))
     //val resultado = fireTsDF.withColumn("Delay", datediff(col("ArrivalTS"), col("IncidentDate"))) //esto me da 0 siempre, no cuenta las horas creo
@@ -95,7 +97,16 @@ object ejSanFran {
 
     //fireTsDF.where(month(col("Incidentdate"))===7).agg(count(col("Incident Number"))).show() //si queremos comparar, no vale poner solo un =
 
-    fireTsDF.groupBy(month(col("Incidentdate"))).agg(countDistinct(col("IncidentDate"))).show()
+    //fireTsDF.groupBy(month(col("Incidentdate"))).agg(countDistinct(col("IncidentDate"))).show()
+
+    resultado
+      .select(F.sum("Number of Alarms"), F.avg("Delay"),
+        F.min(col("Delay")), F.max("Delay"))
+      .show()
+    //Delay.min sale negativo porque hay un fallo en los datos
+
+
+
 
   }
 
