@@ -8,13 +8,7 @@ import org.apache.spark.sql.functions.expr
 import org.apache.spark.sql.functions.concat
 
 object ejemplo2 {
-  def main(args: Array[String]): Unit = {
-
-    // Create a SparkSession
-    val spark = SparkSession
-      .builder().master("local[1]")
-      .appName("Authors")
-      .getOrCreate()
+  def ej2(spark: SparkSession): Unit = {
 
     //Definir un schema
     val schema = StructType(Seq(

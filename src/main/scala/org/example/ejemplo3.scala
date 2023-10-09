@@ -8,13 +8,7 @@ import org.apache.spark.sql.types._
 
 
 object ejemplo3 {
-  def main(args: Array[String]): Unit = {
-
-    val spark = SparkSession
-    .builder().master("local[1]")
-    .appName("Blog")
-    .getOrCreate()
-
+  def ej3(spark: SparkSession): Unit = {
 
     val blogRow = Row(6, "Reynold", "Xin", "https://tinyurl.6", 255568, "3/2/2015", Array("twitter", "LinkedIn"))
 //    println(blogRow) //problemas para mostrar el array
