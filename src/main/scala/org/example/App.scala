@@ -1,7 +1,7 @@
 package org.example
 
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions._
+
 
 
 object App {
@@ -19,7 +19,7 @@ object App {
     //ejemplo.ejecutable(spark)
     //ejemploQuijote.Quijote(spark)
     //ejemplo2.ej2(spark)
-    ejemplo3.ej3(spark)
+    //ejemplo3.ej3(spark)
 
 
   }
