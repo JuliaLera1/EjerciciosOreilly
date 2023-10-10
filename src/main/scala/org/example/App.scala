@@ -20,6 +20,7 @@ object App {
     //ejemploQuijote.Quijote(spark)
     //ejemplo2.ej2(spark)
     //ejemplo3.ej3(spark)
+    ejSanFran.Fire(spark)
 
 
   }
