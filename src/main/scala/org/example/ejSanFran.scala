@@ -6,8 +6,13 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 
 
+import scala.language.postfixOps
+
+
 object ejSanFran {
   def Fire(spark: SparkSession) {
+
+    import spark.implicits._ //para poder usar $ como col
 
 //  Así  no especificamos schema, dejamos que spark lo infiera de un sample
 //    val sampleDF = spark
@@ -55,7 +60,7 @@ object ejSanFran {
     //dFire.show()
 
 
-    val newFireDF= FireDF.withColumnRenamed("Action Taken Primary", "PrimaryAction")
+   /* val newFireDF= FireDF.withColumnRenamed("Action Taken Primary", "PrimaryAction")
     //newFireDF.show()
 
     val fireTsDF = newFireDF.withColumn("IncidentDate", to_timestamp(col("Incident Date"), "yyyy-MM-dd'T'HH:mm:ss"))
@@ -65,7 +70,8 @@ object ejSanFran {
       .withColumn("AlarmTS", to_timestamp(col("Alarm DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Alarm DtTm")
 //importante poner en la segunda parte de to_timestamp en qué formato está nuestra fecha, MM es mes, mm es minuto
 
-
+*/
+    val fireTsDF= bonito(dFire)
 //    val resultado = fireTsDF.withColumn("Delay", col("ArrivalTS") - col("IncidentDate"))
     //val resultado = fireTsDF.withColumn("Delay", datediff(col("ArrivalTS"), col("IncidentDate"))) //esto me da 0 siempre, no cuenta las horas creo
     val resultado = fireTsDF.withColumn(
@@ -129,19 +135,20 @@ object ejSanFran {
 //    val zc=resultado.select("zipcode").distinct().count()
     val zc90 = resultado.select("zipcode").where(col("zipcode").startsWith("9410")).distinct().count()
     val zc91 = resultado.select("zipcode").where(col("zipcode").startsWith("9411")).distinct().count()
+    val zc9 = resultado.select("zipcode").where(col("zipcode").startsWith("9411") || col("zipcode").startsWith("9410")).distinct().count()
     println(zc90,zc91)
   }
 
-//def bonito(df: DataFrame): Unit= {
-//  val newFireDF = df.withColumnRenamed("Action Taken Primary", "PrimaryAction")
-//  //newFireDF.show()
-//
-//  val fireTsDF = newFireDF.withColumn("IncidentDate", to_timestamp(col("Incident Date"), "yyyy-MM-dd'T'HH:mm:ss"))
-//    .drop("Incident Date")
-//    .withColumn("ArrivalTS", to_timestamp(col("Arrival DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Arrival DtTm")
-//    .withColumn("CloseTS", to_timestamp(col("Close DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Close DtTm")
-//    .withColumn("AlarmTS", to_timestamp(col("Alarm DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Alarm DtTm")
-//  //importante poner en la segunda parte de to_timestamp en qué formato está nuestra fecha, MM es mes, mm es minuto
-//}
+def bonito(df: DataFrame): DataFrame= {
+  val newFireDF = df.withColumnRenamed("Action Taken Primary", "PrimaryAction")
+  newFireDF.show()
+  /* val fireTsDF = */ newFireDF.withColumn("IncidentDate", to_timestamp(col("Incident Date"), "yyyy-MM-dd'T'HH:mm:ss"))
+    .drop("Incident Date")
+    .withColumn("ArrivalTS", to_timestamp(col("Arrival DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Arrival DtTm")
+    .withColumn("CloseTS", to_timestamp(col("Close DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Close DtTm")
+    .withColumn("AlarmTS", to_timestamp(col("Alarm DtTm"), "yyyy-MM-dd'T'HH:mm:ss")).drop("Alarm DtTm")
+  //importante poner en la segunda parte de to_timestamp en qué formato está nuestra fecha, MM es mes, mm es minuto
+  //fireTsDF //la última línea es lo que devuelve
+}
 
 }
