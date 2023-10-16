@@ -23,7 +23,7 @@ object App {
     //ejemplo3.ej3(spark)
     //ejSanFran.Fire(spark)
     //MnM.basico(spark)
-    IotDevices.json(spark)
+    IotDevices.arcjson(spark)
 
 
   }
