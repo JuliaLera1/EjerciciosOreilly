@@ -47,7 +47,7 @@ object IotDevices {
     //De esta forma podemos obtener qué entradas dan con esos valores máximos y mínimos
     minMaxRows.filter(col("temp")===col("max_temp")).show()
     */
-    IoT.groupBy("cn").agg(avg("temp").alias("temp_avg")).orderBy("temp_avg").show()
+    IoT.groupBy("cn").agg(avg("c02_level").alias("c02_avg")).orderBy(desc("c02_avg")).show()
 
 
 
