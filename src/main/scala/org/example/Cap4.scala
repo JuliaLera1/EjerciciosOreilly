@@ -59,10 +59,27 @@ winter months or holidays?)
         .when(col("delay") > 0 && col("delay") <= 60, "Tolerable Delay")
         .when(col("delay") === 0, "No Delay")
         .otherwise("Early"))
-    dfDatesDelay.orderBy(desc("delay")).show()
+
     //¿CÓMO PUEDO HACERLO USANDO CASE COMO LO HACE EN EL LIBRO?
+    val dfconteo= dfDatesDelay.groupBy(col("TypeDelay")).agg(count("*").alias("conteo"))
+    val totalFlights=dfDatesDelay.count()
+    val dfPercent= dfconteo.withColumn("percentage", (col("conteo")/totalFlights)*100)
+    dfPercent.show()
 
+    spark.catalog.listDatabases()
+    spark.catalog.listTables()
+    spark.catalog.listColumns("us_delay_flights_tbl")//.show()
 
+    /*
+    * Let’s assume you have an existing database, learn_spark_db, and table,
+    us_delay_flights_tbl, ready for use. Instead of reading from an external JSON file,
+    you can simply use SQL to query the table and assign the returned result to a
+    DataFrame:
+*/
+
+    val usFlightsDF = spark.sql("SELECT * FROM us_delay_flights_tbl")
+    val usFlightsDF2 = spark.table("us_delay_flights_tbl")
+//Now you have a cleansed DataFrame read from an existing Spark SQL table
 
   }
 
