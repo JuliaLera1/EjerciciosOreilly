@@ -47,9 +47,20 @@ winter months or holidays?)
 */
     val dfDates= df.withColumn("dateTS", to_timestamp(col("date"), "MMddHHmm")).drop("date")
      //pone el año 1970, pero no es muy importante para los ejercicios
+    /*
      val dfDates1 = dfDates.select("*").where(col("origin") === "SFO" && col("destination") === "ORD")
     dfDates1.where(col("delay").gt(120)).groupBy(month(col("dateTS"))).count().show()
     dfDates1.where(col("delay").gt(120)).groupBy(dayofmonth(col("dateTS"))).count().orderBy(desc("count")).show()
+*/
+    val dfDatesDelay = dfDates.withColumn("TypeDelay",
+      when(col("delay") > 360, "Very Long Delay")
+        .when(col("delay") > 120 && col("delay") <= 360, "Long Delay")
+        .when(col("delay") > 60 && col("delay") <= 120, "Short Delay")
+        .when(col("delay") > 0 && col("delay") <= 60, "Tolerable Delay")
+        .when(col("delay") === 0, "No Delay")
+        .otherwise("Early"))
+    dfDatesDelay.orderBy(desc("delay")).show()
+    //¿CÓMO PUEDO HACERLO USANDO CASE COMO LO HACE EN EL LIBRO?
 
 
 
