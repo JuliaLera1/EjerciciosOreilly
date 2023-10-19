@@ -18,7 +18,7 @@ object Cap4 {
 
     // Read and create a temporary view
     // Infer schema (note that for larger files you may want to specify the schema)
-    val df = spark.read.format("csv")
+    val fligths = spark.read.format("csv")
       //.option("inferSchema", "true")
       .schema("date STRING, delay INT, distance INT, origin STRING, destination STRING")
       .option("header", "true")
@@ -31,12 +31,12 @@ object Cap4 {
 //      .csv("src/main/resources/departuredelays.csv")
 
     // Create a temporary view
-    df.createOrReplaceTempView("us_delay_flights_tbl")
+    fligths.createOrReplaceTempView("us_delay_flights_tbl")
     //PRIMEROS EJERCICIOS
     /*
-    df.select("distance", "origin", "destination").where(col("distance").gt(1000)).orderBy(desc("distance")).show()
-    val df1=df.select("*").where(col("origin")==="SFO" && col("destination")==="ORD")
-    df1.where(col("delay").gt(120)).orderBy(desc("delay")).show()
+    fligths.select("distance", "origin", "destination").where(col("distance").gt(1000)).orderBy(desc("distance")).show()
+    val fligths1=fligths.select("*").where(col("origin")==="SFO" && col("destination")==="ORD")
+    fligths1.where(col("delay").gt(120)).orderBy(desc("delay")).show()
 
      */
 /*
@@ -45,7 +45,7 @@ ferent dates. (As an exercise, convert the date column into a readable format an
 the days or months when these delays were most common. Were the delays related to
 winter months or holidays?)
 */
-    val dfDates= df.withColumn("dateTS", to_timestamp(col("date"), "MMddHHmm")).drop("date")
+    val dfDates= fligths.withColumn("dateTS", to_timestamp(col("date"), "MMddHHmm")).drop("date")
      //pone el año 1970, pero no es muy importante para los ejercicios
     /*
      val dfDates1 = dfDates.select("*").where(col("origin") === "SFO" && col("destination") === "ORD")
