@@ -1,5 +1,7 @@
 package org.example
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.source.image
+
 
 
 object DataSources {
@@ -16,7 +18,7 @@ object DataSources {
       .option("header", "true")
       .option("mode", "PERMISSIVE")
       .load("src/main/resources/csv/2010-summary.csv")
-    //en el libro, en el path aparece /csv/* pero si pongo eso me a error
+
 
 /*
 No puedo guardar el df ahora mismo porque los archivos se guardan en HDFS, no en Windows normal
@@ -28,6 +30,18 @@ No puedo guardar el df ahora mismo porque los archivos se guardan en HDFS, no en
     val file = "src/main/resources/summary.parquet"
     //Parquet is the default data source in Spark, you can only see its content with Spark (it is thought for the machine to understand)
     val df1 = spark.read.format("parquet").load(file)
+
+
+    //use JSON
+    val filejson = "src/main/resources/json/2010-summary.json" //En el libro, ponen /* pero aquí no funciona, por qué?
+    val df2 = spark.read.format("json").load(filejson)
+
+    //cargar una imagen
+    val imageDir = "src/main/resources/Captura1.PNG"
+    val image1 = "src/main/resources/Browse2frame0000.jpg"
+    val imagesDF = spark.read.format("image").load("image1")
+    imagesDF.printSchema()
+
 
 
   }
