@@ -1,5 +1,6 @@
 package org.example
 
+import org.apache.hadoop.shaded.com.google.common.io.MoreFiles
 import org.apache.spark.sql.SparkSession
 
 
@@ -10,8 +11,12 @@ object App {
   def main(args: Array[String]) {
 
     //empezamos la sesión de Spark
-    val spark: SparkSession = SparkSession.builder().master("local[1]")
-      .appName("SparkByExamples")
+//    val spark: SparkSession = SparkSession.builder().master("local[1]")
+//      .appName("SparkByExamples")
+//      .getOrCreate()
+
+    implicit val spark: SparkSession = SparkSession.builder().master("local[1]")
+      .appName("SparkByExamples.com")
       .getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
 
@@ -23,10 +28,12 @@ object App {
     //ejemplo3.ej3(spark)
     //ejSanFran.Fire(spark)
     //MnM.basico(spark)
-    IotDevices.arcjson(spark)
-
+    //IotDevices.arcjson(spark)
+    //MoreFunctions.execute()
+    ExArray.ex1()
 
   }
+
 
 }
 
