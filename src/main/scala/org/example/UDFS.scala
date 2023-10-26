@@ -28,7 +28,7 @@ object UDFS {
     val resultDF=df.select("id", cubed(col ("id")).alias("id_cubed"))
     resultDF.show()
     */
-    spark.sql("SELECT id FROM udf_test WHERE id IS NOT NULL AND strlen(id)>1").show()
+    spark.sql("SELECT id FROM udf_test WHERE id IS NOT NULL AND id>2").show()
 
   }
 

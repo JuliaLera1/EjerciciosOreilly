@@ -1,6 +1,6 @@
 package org.example
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.ml.source.image
+//import org.apache.spark.ml.source.image
 
 
 
@@ -20,11 +20,10 @@ object DataSources {
       .load("src/main/resources/csv/2010-summary.csv")
 
 
-/*
-No puedo guardar el df ahora mismo porque los archivos se guardan en HDFS, no en Windows normal
-    val location = ""
-    df.write.format("json").mode("overwrite").save(location)
-*/
+
+
+    df.write.format("csv").mode("overwrite").save("/src/main/resources")
+    df.write.format("csv").mode("overwrite").save("C:/Users/julia.lera/Downloads/test1")
 
     // Use Parquet
     val file = "src/main/resources/summary.parquet"
@@ -37,10 +36,10 @@ No puedo guardar el df ahora mismo porque los archivos se guardan en HDFS, no en
     val df2 = spark.read.format("json").load(filejson)
 
     //cargar una imagen
-    val imageDir = "src/main/resources/Captura1.PNG"
-    val image1 = "src/main/resources/Browse2frame0000.jpg"
-    val imagesDF = spark.read.format("image").load("image1")
-    imagesDF.printSchema()
+//    val imageDir = "src/main/resources/Captura1.PNG"
+//    val image1 = "src/main/resources/Browse2frame0000.jpg"
+//    val imagesDF = spark.read.format("image").load("image1")
+//    imagesDF.printSchema()
 
 
 
