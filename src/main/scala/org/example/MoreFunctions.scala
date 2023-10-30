@@ -13,6 +13,10 @@ object MoreFunctions {
 //    tC.createOrReplaceTempView("tC")
 //    // Show the DataFrame
 //    tC.show()
+    spark.sql("CREATE DATABASE IF NOT EXISTS ejercicios")
+    spark.sql("USE ejercicios")
+
+    spark.sql("CREATE TABLE IF NOT EXISTS personas (nombre String, edad Int)")
 
 
   }
