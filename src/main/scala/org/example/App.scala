@@ -22,7 +22,7 @@ val conf: SparkConf = new SparkConf().setAppName("name").setMaster("local")
 
     implicit val spark: SparkSession = SparkSession.builder().config(sc.getConf).master("local[1]")
       .appName("SparkByExamples.com")
-      //.enableHiveSupport()
+      .enableHiveSupport()
       .getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
 
@@ -36,10 +36,10 @@ val conf: SparkConf = new SparkConf().setAppName("name").setMaster("local")
     //ejSanFran.Fire(spark)
     //MnM.basico(spark)
     //IotDevices.arcjson(spark)
-    //MoreFunctions.execute()
+    MoreFunctions.execute()
     //ExArray.ex1()
     //ExArray.avanzado()
-    airports.airpots()
+    //airports.airpots()
 
 
   }
