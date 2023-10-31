@@ -16,7 +16,7 @@ object MoreFunctions {
     spark.sql("CREATE DATABASE IF NOT EXISTS ejercicios")
     spark.sql("USE ejercicios")
 
-    spark.sql("CREATE TABLE IF NOT EXISTS personas (nombre String, edad Int)")
+    spark.sql("""CREATE TABLE IF NOT EXISTS personas (nombre String, edad Int)""")
 
 
   }
