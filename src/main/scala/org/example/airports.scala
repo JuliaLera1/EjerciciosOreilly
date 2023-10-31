@@ -80,11 +80,55 @@ object airports {
     spark.sql(
       """
     SELECT a.City, a.State, f.date, f.delay, f.distance, f.destination
-     FROM foo f
+     FROM sfo f
      JOIN airports_na a
      ON a.IATA = f.origin
     """).show()
 
+    // WINDOWING (uses values from the rows in a window (a range of inputs rows) to return a set of values
+    // Starting with a SQL query to show a review of the TotalDelays experienced by flights originating
+    // from SEA, SFO, JFK and going to a specific set of destination locations:
+    println("Total retrasos de vuelos con origen Seattle, San Francisco y Nueva York")
+    val departureDelaysWindow = spark.sql(
+      """SELECT origin, destination, SUM(delay) AS TotalDelays
+        |FROM departureDelays
+        |WHERE origin IN ('SEA', 'SFO', 'JFK')
+        |AND destination IN ('SEA', 'SFO', 'JFK', 'DEN', 'ORD', 'LAX', 'ATL')
+        |GROUP BY origin, destination;
+        |""".stripMargin)
+
+    println("Se muestra prueba")
+    departureDelaysWindow.show()
+    departureDelaysWindow.createOrReplaceTempView("departureDelaysWindow")
+
+    //ahora wueremos ver para cada uno de estos aeropuertos los tres destinos con más retrasos
+    val maxdel=spark.sql(
+      """
+        |SELECT origin, destination, SUM(TotalDelays) AS TotalDelays
+        |FROM departureDelaysWindow
+        |WHERE origin = 'JFK'
+        |GROUP BY origin, destination
+        |""".stripMargin)
+    maxdel.createOrReplaceTempView("maxDelays")
+    print("Estos son los tres destinos con más retrasos saliendo de JFK: \n")
+spark.sql(
+    """
+      |SELECT origin, destination, TotalDelays
+      |FROM maxDelays
+      |ORDER BY TotalDelays DESC
+      |LIMIT 3
+      |""".stripMargin).show()
+print("Y aquí vemos los tres destinos con más retrasos saliendo de JFK, SFO o SEA: \n")
+    spark.sql(
+      """
+    SELECT origin, destination, TotalDelays, rank
+     FROM (
+     SELECT origin, destination, TotalDelays, dense_rank()
+     OVER (PARTITION BY origin ORDER BY TotalDelays DESC) as rank
+     FROM departureDelaysWindow
+     ) t
+     WHERE rank <= 3
+    """).show()
 
   }
 
