@@ -43,8 +43,9 @@ val conf: SparkConf = new SparkConf().setAppName("name").setMaster("local")
     //MoreFunctions.execute() //no funciona!!
     //ExArray.ex1()
     //ExArray.avanzado()
-    airports.airpots()
-   // bloggers.ejblog()
+    //airports.airpots()
+    //bloggers.ejblog()
+    Datasets.randomDS()
 
 
   }
