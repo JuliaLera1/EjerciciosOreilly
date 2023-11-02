@@ -3,6 +3,8 @@ package org.example
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 
+
+
 object airports {
   def airpots()(implicit spark: SparkSession): Unit={
     import spark.implicits._
@@ -110,6 +112,7 @@ object airports {
         |GROUP BY origin, destination
         |""".stripMargin)
     maxdel.createOrReplaceTempView("maxDelays")
+    /*
     print("Estos son los tres destinos con más retrasos saliendo de JFK: \n")
 spark.sql(
     """
@@ -129,6 +132,43 @@ print("Y aquí vemos los tres destinos con más retrasos saliendo de JFK, SFO o 
      ) t
      WHERE rank <= 3
     """).show()
+*/
+    //MODIFICACIONES DE LOS DATAFRAME
+    val sfo2 = sfo.withColumn(
+      "status",
+      expr("CASE WHEN delay <= 10 THEN 'On-time' ELSE 'Delayed' END")
+    )
+    val sfo3 = sfo2.drop("delay") //quitar la columna delay
+
+    val sfo4 = sfo3.withColumnRenamed("status", "flight_status")
+
+    //PIVOTING: swapping the columns for the rows
+
+    spark.sql(
+      """
+        |SELECT destination, CAST(SUBSTRING(date, 0, 2) AS int) AS month, delay
+        | FROM departureDelays
+        |WHERE origin = 'SEA'
+        |""".stripMargin).show() //tomamos una subcadena del string date, que empieza en la posición 0 y toma dos caracteres, la casteamos como int y ha esto lo llamamos MONTH
+
+
+
+    spark.sql(
+      """
+        |SELECT * FROM (
+        |SELECT destination, CAST(SUBSTRING(date, 0, 2) AS int) AS month, delay
+        | FROM departureDelays WHERE origin = 'SEA'
+        |)
+        |PIVOT (
+        | CAST(AVG(delay) AS DECIMAL(4, 2)) AS AvgDelay, MAX(delay) AS MaxDelay
+        | FOR month IN (1 JAN, 2 FEB)
+        |)
+        |ORDER BY destination
+        |""".stripMargin).show()
+    //en este código, usamos la tabla de antes con el MONTH, calculamos la media y el valor máximo de Delay para cada destino
+    // y luego añadimos a cada fila el valor corespondiente según su destino
+    //si no hubo vuelos a ese destino en feb o ene aparece null en la columna correspondiente
+
 
   }
 
