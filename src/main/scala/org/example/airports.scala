@@ -169,6 +169,11 @@ print("Y aquí vemos los tres destinos con más retrasos saliendo de JFK, SFO o 
     // y luego añadimos a cada fila el valor corespondiente según su destino
     //si no hubo vuelos a ese destino en feb o ene aparece null en la columna correspondiente
 
+    //para comparar el restraso genral con el particular
+//join con el vuelo concreto para comparar union con destination
+    //o mejor con una funcion de ventana que particione por el mes y por destino y que haga una media de todos los valores de mes y destino y crearia una columna que para cada
+    //particionamiento tendría un valor
+    //window().partition(destino, mes).media(delay)
 
   }
 
