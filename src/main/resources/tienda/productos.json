@@ -1,0 +1,11 @@
+[
+    {"producto_id": 1, "nombre_producto": "Producto_A", "categoria": "Electronicos"},
+    {"producto_id": 2, "nombre_producto": "Producto_B", "categoria": "Ropa"},
+    {"producto_id": 3, "nombre_producto": "Producto_C", "categoria": "Fontaneria"},
+    {"producto_id": 4, "nombre_producto": "Producto_D", "categoria": "Alimentacion"},
+    {"producto_id": 5, "nombre_producto": "Producto_E", "categoria": "Juguetes"},
+    {"producto_id": 6, "nombre_producto": "Producto_F", "categoria": "Deporte"},
+    {"producto_id": 7, "nombre_producto": "Producto_G", "categoria": "Gaming"},
+    {"producto_id": 8, "nombre_producto": "Producto_H", "categoria": "Libros"}
+]
+  

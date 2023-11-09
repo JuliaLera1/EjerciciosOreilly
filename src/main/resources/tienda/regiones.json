@@ -1,0 +1,7 @@
+[
+    {"region_id": "A", "nombre_region": "Norte"},
+    {"region_id": "B", "nombre_region": "Sur"},
+    {"region_id": "C", "nombre_region": "Este"},
+    {"region_id": "D", "nombre_region": "Oeste"}
+  ]
+  
