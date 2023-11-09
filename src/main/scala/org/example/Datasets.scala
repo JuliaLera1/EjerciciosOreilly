@@ -11,6 +11,7 @@ import org.apache.spark.sql.types._
 object Datasets {
   // Our case class for the Dataset
   case class Usage(uid: Int, uname: String, usage: Int)
+  case class UsageCost(uid: Int, uname:String, usage: Int, cost: Double)
 
   def randomDS()(implicit spark: SparkSession): Unit={
  //según ChatGPT
@@ -56,6 +57,7 @@ object Datasets {
      */
 
     // Use an if-then-else lambda expression and compute a value
+    //por alguna razón este código no funciona
 //    dsUsage.map(u => {
 //        if (u.usage > 750) u.usage * .15 else u.usage * .50
 //      })
@@ -68,6 +70,20 @@ object Datasets {
     dsUsage.map(u => {
       computeCostUsage(u.usage)
     }).show(5, false)
+
+    //Though we have computed values for the cost of usage, we don’t know which users
+    //the computed values are associated with.
+    //1. Create a Scala case class, UsageCost, with an additional field or column named cost. la hemos creado arriba antes del def random.
+    //2.Compute the usage cost with Usage as a parameter
+    //3. Return a new object, UsageCost
+    def computeUserCostUsage(u: Usage): UsageCost = {
+      val v = if (u.usage > 750) u.usage * 0.15 else u.usage * 0.50
+      UsageCost(u.uid, u.uname, u.usage, v)
+    }
+    //4. Use map() on our original Dataset
+    dsUsage.map(u => {
+      computeUserCostUsage(u)
+    }).show(5)
 
 
   }
