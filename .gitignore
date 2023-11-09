@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Para que ignore un archivo grande ###
+src/main/resources/Fire_Incidents.csv
