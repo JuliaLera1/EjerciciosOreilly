@@ -1,0 +1,17 @@
+categoria,nombre_region,total_vendido,porcentaje_vendido
+Alimentacion,Norte,25,100.0
+Deporte,Sur,53,100.0
+Electronicos,Norte,74,67.27272727272727
+Electronicos,Este,18,16.363636363636363
+Electronicos,Oeste,18,16.363636363636363
+Fontaneria,Este,60,100.0
+Gaming,Sur,40,66.66666666666667
+Gaming,Norte,20,33.333333333333336
+Juguetes,Norte,22,59.45945945945946
+Juguetes,Este,15,40.54054054054054
+Libros,Oeste,25,62.5
+Libros,Norte,15,37.5
+Ropa,Este,68,29.694323144104803
+Ropa,Sur,98,42.79475982532751
+Ropa,Oeste,28,12.22707423580786
+Ropa,Norte,35,15.283842794759826

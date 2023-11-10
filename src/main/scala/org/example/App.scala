@@ -32,7 +32,7 @@ val conf: SparkConf = new SparkConf().setAppName("name").setMaster("local")
 
 
     //aquí ponemos cada función a la que vamos a llamar
-
+//SWITCH CASE PARA que llame a cada script
     //ejemplo.ejecutable(spark)
     //ejemploQuijote.Quijote(spark)
     //ejemplo2.ej2(spark)

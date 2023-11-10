@@ -75,39 +75,49 @@ object AppEjercicio {
     ventasRegion.createOrReplaceTempView("ventasRegion")
 
     //este código nos da el porcentaje de productos vendidos en cada region, sin distincion de categoría
- val resumen_ventas_2=spark.sql(
+    println("En esta tabla, simplemente se muestra el porcentaje de producto total, sin distincion de categoria, que se ha vendido en cada region: \n")
+spark.sql(
       """
         |SELECT nombre_region, (sum(cantidad_vendida)*100/(SELECT SUM(cantidad_vendida) FROM ventasRegion)) as ventas_prc
         |FROM ventasRegion
         |GROUP BY nombre_region
         |""".stripMargin
     )
-   resumen_ventas_2.show()
-    //ahora queremos calcular qué porcentaje de cada producto se vendió en cada región
+
+
+
+  // primero, para aclararnos, hacemos una consulta donde calculamos cuanto se ha vendido de cada producto en cada region
+    println("En esta tabla, se muestra cuánto se ha vendido de cada producto en cada region: \n")
     spark.sql(
       """
-        |SELECT categoria, sum(cantidad_vendida) as ventas_prod
+        |SELECT categoria, nombre_region, SUM(cantidad_vendida) as total_vendido
         |FROM ventasRegion
-        |GROUP BY categoria
+        |GROUP BY categoria, nombre_region
         |""".stripMargin
-    ).createOrReplaceTempView("ventasProd")
-    //unimos esta tabla a ventasRegion
-    spark.sql(
-      """
-        |SELECT a.categoria, a.nombre_region, a.cantidad_vendida, b.ventas_prod
-        |FROM ventasRegion as a
-        |JOIN ventasProd as b
-        |ON a.categoria=b.categoria
-        |""".stripMargin
-    ).createOrReplaceTempView("ventasProdRegion")
-//    spark.sql(
-//      """
-//        |SELECT categoria, nombre_region, (sum(cantidad_vendida)/ventas_prod) as ventas_prc
-//        |FROM ventasProdRegion
-//        |GROUP BY nombre_region, categoria
-//        |ORDER BY categoria
-//        |""".stripMargin
-//    ).show()
+    ).show()
+
+    //Ahora ya podemos calcular los porcentajes...
+    println("En esta tabla se muestra la cantidad total de cada tipo de producto vendido en cada region y el porcentaje (el porcentaje " +
+      "se calcula sobre la cantidad de producto de esa categoría total vendido en las cuatro regiones): \n")
+    val resumen_ventas_2=
+   spark.sql(
+     """
+       |SELECT categoria, nombre_region, total_vendido,
+       |total_vendido*100 / SUM(total_vendido) OVER(PARTITION BY categoria) AS porcentaje_vendido
+       |FROM (
+       |    SELECT nombre_region,
+       |           categoria,
+       |           SUM(cantidad_vendida) AS total_vendido
+       |    FROM ventasRegion
+       |    GROUP BY categoria, nombre_region
+       |)
+       |ORDER BY categoria
+       |""".stripMargin
+   )
+    resumen_ventas_2.show()
+
+
+
     resumen_ventas_1.write
       .option("header", "true") //esto hace que se incluya el encabezado en el csv
       .option("delimeter", ";") //establece los delimitadores como ;
