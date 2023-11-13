@@ -27,5 +27,10 @@ object ConfigCheck {
     //esto es para ver unicamente los Spark-SQL configs específicos
     spark.sql("SET -v").select("key", "value").show(5, false)
 
+   spark.conf.get("spark.sql.shuffle.partitions")
+   spark.conf.set("spark.sql.shuffle.partitions", 5)
+   spark.conf.get("spark.sql.shuffle.partitions")
+
+
   }
 }

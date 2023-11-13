@@ -13,12 +13,8 @@ object App {
 
   def main(args: Array[String]) {
 
-    //empezamos la sesión de Spark
-//    val spark: SparkSession = SparkSession.builder().master("local[1]")
-//      .appName("SparkByExamples")
-//      .getOrCreate()
-val conf: SparkConf = new SparkConf().setAppName("name").setMaster("local")
-  .set("spark.testing.memory", "2147480000")
+    val conf: SparkConf = new SparkConf().setAppName("name").setMaster("local")
+        .set("spark.testing.memory", "2147480000")
 
     val sc: SparkContext = new SparkContext(conf)
 
@@ -45,7 +41,15 @@ val conf: SparkConf = new SparkConf().setAppName("name").setMaster("local")
     //ExArray.avanzado()
     //airports.airpots()
     //bloggers.ejblog()
-    Datasets.randomDS()
+    //Datasets.randomDS()
+
+    /*
+    Ejercicio que nos mandó David sobre pivotaje y utilizar spark de forma más segura y eficiente
+
+    */
+
+    //Ejercicio123.ejecutable()
+    EjercicioScript.ejecutable()
 
 
   }
