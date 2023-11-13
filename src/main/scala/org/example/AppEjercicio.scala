@@ -94,12 +94,13 @@ spark.sql(
         |FROM ventasRegion
         |GROUP BY categoria, nombre_region
         |""".stripMargin
-    ).show()
+    ).createOrReplaceTempView("VentasTotVendido")
+
 
     //Ahora ya podemos calcular los porcentajes...
     println("En esta tabla se muestra la cantidad total de cada tipo de producto vendido en cada region y el porcentaje (el porcentaje " +
       "se calcula sobre la cantidad de producto de esa categoría total vendido en las cuatro regiones): \n")
-    val resumen_ventas_2=
+    val resumen_ventas_21=
    spark.sql(
      """
        |SELECT categoria, nombre_region, total_vendido,
@@ -114,8 +115,26 @@ spark.sql(
        |ORDER BY categoria
        |""".stripMargin
    )
+    resumen_ventas_21.show()
+    resumen_ventas_21.createOrReplaceTempView("resumen_ventas_21")
+//Ahora tengo que hacer un pivot
+    val resumen_ventas_2 = {
+    spark.sql(
+      """
+        |SELECT *
+        |FROM ( SELECT categoria, nombre_region,
+        |total_vendido*100 / SUM(total_vendido) OVER(PARTITION BY categoria) AS porcentaje_vendido
+        |FROM VentasTotVendido)
+        |PIVOT (
+        | CAST(MAX(porcentaje_vendido) AS DECIMAL(5,2) ) AS ventas_prc
+        | FOR nombre_region IN ("Norte", "Sur", "Este", "Oeste")
+        |)
+        |ORDER BY categoria
+        |
+        |""".stripMargin
+    )
+    }
     resumen_ventas_2.show()
-
 
 
     resumen_ventas_1.write
