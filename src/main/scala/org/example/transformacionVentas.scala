@@ -1,17 +1,19 @@
 package org.example
 
 import org.apache.spark.sql.SparkSession
-import java.util.Properties
-import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types._
+import org.apache.spark.sql.functions.col
 
-object EjercicioScript {
-  def ejecutable()(implicit spark: SparkSession): Unit={
+import java.util.Properties
 
-    val properties: Properties = new Properties()
-    properties.load(getClass.getResourceAsStream("/properties.file")) //al principio no iba porque estaba poniendo /config.properties y mi archivo no está ahí
+object transformacionVentas {
+  def ejTransformacion(propertiesFile: String)(implicit spark: SparkSession): Unit={
 
-//aquí ponemos todos los path refiriendonos al properties.file
+    val properties = new java.util.Properties()
+    val input = new java.io.FileInputStream(propertiesFile)
+    properties.load(input)
+
+    //aquí ponemos todos los path refiriendonos al properties.file
     val ventasPath = properties.getProperty("ventasFile")
     val productosPath = properties.getProperty("productosFile")
     val regionesPath = properties.getProperty("regionesFile")

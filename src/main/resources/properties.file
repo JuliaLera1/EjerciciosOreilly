@@ -1,5 +1,6 @@
 ventasFile=src/main/resources/tienda/landing/ventas.json
 productosFile=src/main/resources/tienda/productos.json
 regionesFile=src/main/resources/tienda/regiones.json
+validacionPath=src/main/resources/tienda/staging/ventas
 csv1Path=src/main/resources/tienda/business/resumen_ventas_1
 csv2Path=src/main/resources/tienda/business/resumen_ventas_2
